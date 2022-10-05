@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Queue;
 
 import railwayapp.Input;
+import railwayapp.Database.Databasehandler;
 import railwayapp.Passenger.Passenger;
 
 class Gender extends Input {
@@ -46,28 +47,31 @@ class Preference extends Input {
   }
 }
 public class TicketBooking {
-  
-  static int availableLB = 1;
-  static int availableMB = 1;
-  static int availableUB = 1;
-  static int availableRAC = 1;
-  static int availableWL = 1;
+  static Databasehandler db = new Databasehandler();
+  public static final String passengrData = null;
+  static int availableLB = 21;
+  static int availableMB = 21;
+  static int availableUB = 21;
+  static int availableRAC = 10;
+  static int availableWL = 10;
 
-  static ArrayList<Integer> lower = new ArrayList<>(Arrays.asList(1));
-  static ArrayList<Integer> middle = new ArrayList<>(Arrays.asList(1));
-  static ArrayList<Integer> upper = new ArrayList<>(Arrays.asList(1));
-  static ArrayList<Integer> rac = new ArrayList<>(Arrays.asList(1));
-  static ArrayList<Integer> waiting = new ArrayList<>(Arrays.asList(1));
+  static Integer[] berth = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
+  static Integer[] arr = {1,2,3,4,5,6,7,8,9,10};
+  static ArrayList<Integer> lower = new ArrayList<>(Arrays.asList(berth));
+  static ArrayList<Integer> middle = new ArrayList<>(Arrays.asList(berth));
+  static ArrayList<Integer> upper = new ArrayList<>(Arrays.asList(berth));
+  static ArrayList<Integer> rac = new ArrayList<>(Arrays.asList(arr));
+  static ArrayList<Integer> waiting = new ArrayList<>(Arrays.asList(arr));
 
   static Queue<Integer> wlList = new LinkedList<>();
   static Queue<Integer> racList = new LinkedList<>();
   static ArrayList<Integer> bookedTicktes = new ArrayList<>();
-  static Map<Integer, Passenger> passengrData = new HashMap<>();
+  //static Map<Integer, Passenger> passengrData = new HashMap<>();
 
-  public void book() {
+  public void book() throws ClassNotFoundException {
     Preference p = new Preference();
     Gender g = new Gender();
-    
+
     System.out.println("Enter the passenger name: ");
     String name = Input.getName();
     System.out.println("Enter the passenger age");
@@ -117,11 +121,11 @@ public class TicketBooking {
     } 
   }
 
-  public void bookticket(Passenger p, int seatnumber, String alloted) {
+  public void bookticket(Passenger p, int seatnumber, String alloted) throws ClassNotFoundException {
     p.setSeatnumber(seatnumber);
     p.setAlloted(alloted);
-
-    passengrData.put(p.getPassengerId(), p);
+    db.postPassenger(p);
+    //passengrData.put(p.getPassengerId(), p);
     bookedTicktes.add(p.passengerId);
 
     System.out.print(p.toString());
@@ -129,11 +133,12 @@ public class TicketBooking {
     System.out.println("--------Booked successfully-------");
   }
 
-  public void addToRAC(Passenger p, int seatnumber, String allotedRac) {
+  public void addToRAC(Passenger p, int seatnumber, String allotedRac) throws ClassNotFoundException {
     p.setSeatnumber(seatnumber);
     p.setAlloted(allotedRac);
 
-    passengrData.put(p.getPassengerId(), p);
+    db.postPassenger(p);
+    //passengrData.put(p.getPassengerId(), p);
     racList.add(p.passengerId);
     
     System.out.print(p.toString());
@@ -141,11 +146,11 @@ public class TicketBooking {
     System.out.println("--------Rac Berth Given-------");
   }
 
-  public void addToWaiting(Passenger p, int seatnumber, String allotedWaiting) {
+  public void addToWaiting(Passenger p, int seatnumber, String allotedWaiting) throws ClassNotFoundException {
     p.setSeatnumber(seatnumber);
     p.setAlloted(allotedWaiting);
-
-    passengrData.put(p.getPassengerId(), p);
+    db.postPassenger(p);
+    //passengrData.put(p.getPassengerId(), p);
     wlList.add(p.passengerId);
 
     System.out.print(p.toString());
@@ -153,7 +158,7 @@ public class TicketBooking {
     System.out.println("--------You're in Waiting List-------");
   }
 
-  public void bookticket(Passenger p) {
+  public void bookticket(Passenger p) throws ClassNotFoundException {
     if (availableWL == 0) {
       System.out.println("No tickets available");
       return;

@@ -2,20 +2,20 @@ package railwayapp.Reservation;
 
 import java.util.*;
 
+import railwayapp.Database.Databasehandler;
 import railwayapp.Passenger.Passenger;
 
 public class CancelTicket {
-
-  public void cancel(int id) {
-
-    if (!TicketBooking.passengrData.containsKey(id)) {
+  static Databasehandler db = TicketBooking.db;
+  public void cancel(int id) throws ClassNotFoundException {
+    if (!db.checkId(id)) {
       System.out.println("Passenger id is not found");
     } else {
       cancelTicket(id);
     }
   }
 
-  public static void cancelTicket(int id) {
+  public static void cancelTicket(int id) throws ClassNotFoundException {
     ArrayList<Integer> lower = TicketBooking.lower;
     ArrayList<Integer> middle = TicketBooking.middle;
     ArrayList<Integer> upper = TicketBooking.upper;
@@ -25,10 +25,10 @@ public class CancelTicket {
     Queue<Integer> wlList = TicketBooking.wlList;
     Queue<Integer> racList = TicketBooking.racList;
     ArrayList<Integer> bookedTicktes = TicketBooking.bookedTicktes;
-    Map<Integer, Passenger> passengrData = TicketBooking.passengrData;
+    //Map<Integer, Passenger> passengrData = TicketBooking.passengrData;
 
-    Passenger p = passengrData.get(id);
-    passengrData.remove(Integer.valueOf(id));
+    Passenger p = db.getPassenger(id);
+    db.remove(Integer.valueOf(id));
     bookedTicktes.remove(Integer.valueOf(id));
     int bookedSeatNumber = p.seatnumber;
     System.out.println("-----------Cancelled Successfully---------");
@@ -45,7 +45,7 @@ public class CancelTicket {
     }
     if (racList.size() > 0) {
       TicketBooking tb = new TicketBooking();
-      Passenger passengeFromRAC = passengrData.get(racList.poll());
+      Passenger passengeFromRAC = db.getPassenger(racList.poll()); 
       int seatnumberRAC = passengeFromRAC.getSeatnumber();
       rac.add(seatnumberRAC); 
       TicketBooking.availableRAC++;
@@ -55,7 +55,7 @@ public class CancelTicket {
         // take the passenger from WL and add them to RAC , increase the free space in
         // waiting list and
         // increase available WL and decrease available RAC by 1
-        Passenger passengerFromWaitingList = passengrData.get(wlList.poll());
+        Passenger passengerFromWaitingList = db.getPassenger(wlList.poll()); 
         int positionWL = passengerFromWaitingList.getSeatnumber();
         waiting.add(positionWL);
         wlList.remove(passengerFromWaitingList.passengerId);

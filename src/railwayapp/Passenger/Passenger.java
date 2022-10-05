@@ -11,7 +11,9 @@ public class Passenger {
   public int passengerId = id++;
   public String alloted;
   public int seatnumber;
-
+  public Passenger(){
+    
+  }
   public Passenger(String name, int age, char gender, char preference) {
     this.name = name;
     this.age = age;
@@ -97,5 +99,19 @@ public class Passenger {
   public void setPreference(char preference) {
     this.preference = preference;
   }
+  public String getCname() {
+    return cname;
+  }
 
+  public void setCname(String cname) {
+    this.cname = cname;
+  }
+
+  public int getCage() {
+    return cage;
+  }
+
+  public void setCage(int cage) {
+    this.cage = cage;
+  }
 }

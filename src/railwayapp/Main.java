@@ -5,7 +5,7 @@ import railwayapp.Reservation.CancelTicket;
 import railwayapp.Reservation.TicketBooking;
 
 public class Main {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ClassNotFoundException {
     while(true){
       System.out.println("1.Book\n2.Cancel\n3.Available Tickets\n4.Booked tickets\n5.Exit");
       int choice = Input.getNumber();
